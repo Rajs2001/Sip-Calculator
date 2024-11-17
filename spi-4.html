@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced SIP Calculator with Improved UI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: 'var(--color-primary)',
+                        secondary: 'var(--color-secondary)',
+                        accent: 'var(--color-accent)',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        /* :root {
+            --color-primary: #3b82f6;
+            --color-secondary: #10b981;
+            --color-accent: #f59e0b;
+            --bg-main: #f3f4f6;
+            --bg-card: #ffffff;
+            --text-main: #1f2937;
+            --text-secondary: #4b5563;
+        } */
+        :root {
+            --color-primary: #3b82f6;
+            --color-secondary: #10b981;
+            --color-accent: #f59e0b;
+            --bg-main: #f3f4f6;
+            --bg-card: #ffffff;
+            --text-main: #1f2937;
+            --text-secondary: #4b5563;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .dark {
+            --color-primary: #60a5fa;
+            --color-secondary: #34d399;
+            --color-accent: #fbbf24;
+            --bg-main: #1f2937;
+            --bg-card: #374151;
+            --text-main: #f9fafb;
+            --text-secondary: #d1d5db;
+        }
+        .dark {
+            --color-primary: #60a5fa;
+            --color-secondary: #34d399;
+            --color-accent: #fbbf24;
+            --bg-main: #1f2937;
+            --bg-card: #374151;
+            --text-main: #f9fafb;
+            --text-secondary: #d1d5db;
+        }
+        .theme-pastel {
+            --color-primary: #a78bfa;
+            --color-secondary: #93c5fd;
+            --color-accent: #fde68a;
+            --bg-main: #fff1f2;
+            --bg-card: #ffe4e6;
+            --text-main: #881337;
+            --text-secondary: #9f1239;
+        }
+        .theme-vibrant {
+            --color-primary: #f472b6;
+            --color-secondary: #4ade80;
+            --color-accent: #fb923c;
+            --bg-main: #fef3c7;
+            --bg-card: #fef9c3;
+            --text-main: #92400e;
+            --text-secondary: #b45309;
+        }
+        .theme-elegant {
+            --color-primary: #6366f1;
+            --color-secondary: #8b5cf6;
+            --color-accent: #ec4899;
+            --bg-main: #f8fafc;
+            --bg-card: #f1f5f9;
+            --text-main: #0f172a;
+            --text-secondary: #334155;
+        }
+        .theme-nature {
+            --color-primary: #059669;
+            --color-secondary: #0ea5e9;
+            --color-accent: #eab308;
+            --bg-main: #ecfdf5;
+            --bg-card: #d1fae5;
+            --text-main: #064e3b;
+            --text-secondary: #065f46;
+        }
+        .apply-theme {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+        }
+        .apply-theme .bg-card {
+            background-color: var(--bg-card);
+        }
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            background: #ddd;
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: .2s;
+            transition: opacity .2s;
+            border-radius: 4px;
+        }
+        input[type="range"]:hover {
+            opacity: 1;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--color-primary);
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: var(--color-primary);
+            cursor: pointer;
+            border-radius: 50%;
+        }
+    </style> -->
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        :root {
+            --color-primary: #3b82f6;
+            --color-secondary: #10b981;
+            --color-accent: #f59e0b;
+            --bg-main: #f3f4f6;
+            --bg-card: #ffffff;
+            --text-main: #1f2937;
+            --text-secondary: #4b5563;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .dark {
+            --color-primary: #60a5fa;
+            --color-secondary: #34d399;
+            --color-accent: #fbbf24;
+            --bg-main: #1f2937;
+            --bg-card: #374151;
+            --text-main: #f9fafb;
+            --text-secondary: #d1d5db;
+        }
+        .dark {
+            --color-primary: #60a5fa;
+            --color-secondary: #34d399;
+            --color-accent: #fbbf24;
+            --bg-main: #1f2937;
+            --bg-card: #374151;
+            --text-main: #f9fafb;
+            --text-secondary: #d1d5db;
+        }
+        .theme-pastel {
+            --color-primary: #a78bfa;
+            --color-secondary: #93c5fd;
+            --color-accent: #fde68a;
+            --bg-main: #fff1f2;
+            --bg-card: #ffe4e6;
+            --text-main: #881337;
+            --text-secondary: #9f1239;
+        }
+        .theme-vibrant {
+            --color-primary: #f472b6;
+            --color-secondary: #4ade80;
+            --color-accent: #fb923c;
+            --bg-main: #fef3c7;
+            --bg-card: #fef9c3;
+            --text-main: #92400e;
+            --text-secondary: #b45309;
+        }
+        .theme-elegant {
+            --color-primary: #6366f1;
+            --color-secondary: #8b5cf6;
+            --color-accent: #ec4899;
+            --bg-main: #f8fafc;
+            --bg-card: #f1f5f9;
+            --text-main: #0f172a;
+            --text-secondary: #334155;
+        }
+        .theme-nature {
+            --color-primary: #059669;
+            --color-secondary: #0ea5e9;
+            --color-accent: #eab308;
+            --bg-main: #ecfdf5;
+            --bg-card: #d1fae5;
+            --text-main: #064e3b;
+            --text-secondary: #065f46;
+        }
+        .apply-theme {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+        }
+        .apply-theme .bg-card {
+            background-color: var(--bg-card);
+        }
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            background: #ddd;
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: .2s;
+            transition: opacity .2s;
+            border-radius: 4px;
+        }
+        input[type="range"]:hover {
+            opacity: 1;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--color-primary);
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: var(--color-primary);
+            cursor: pointer;
+            border-radius: 50%;
+        }
+    </style>
+
+</head>
+<body class="min-h-screen p-4 md:p-8 apply-theme transition-colors duration-300">
+    <div class="max-w-4xl mx-auto bg-card shadow-2xl rounded-lg overflow-hidden">
+        <div class="bg-primary p-6 text-white">
+            <h1 class="text-3xl font-bold mb-2">SIP Calculator</h1>
+            <p class="text-sm opacity-80">Calculate your Systematic Investment Plan returns</p>
+        </div>
+        <div class="p-6 md:p-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="space-y-6">
+                    <div>
+                        <label for="frequency" class="block mb-2 text-sm font-medium">
+                            <i class="fas fa-calendar-alt mr-2"></i>Investment Frequency
+                        </label>
+                        <select id="frequency" class="w-full p-2 border rounded-md bg-opacity-50 bg-white dark:bg-opacity-10 dark:bg-black focus:ring-2 focus:ring-primary">
+                            <option value="monthly">Monthly</option>
+                            <option value="yearly">Yearly</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="investmentAmount" class="block mb-2 text-sm font-medium">
+                            <i class="fas fa-coins mr-2"></i>Investment Amount
+                        </label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">₹</span>
+                            <input type="number" id="investmentAmount" class="w-full pl-8 p-2 border rounded-md bg-opacity-50 bg-white dark:bg-opacity-10 dark:bg-black focus:ring-2 focus:ring-primary" value="1000">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="returnRate" class="block mb-2 text-sm font-medium">
+                            <i class="fas fa-chart-line mr-2"></i>Expected Annual Return Rate (%)
+                        </label>
+                        <div class="flex items-center space-x-4">
+                            <input type="range" id="returnRateSlider" min="1" max="30" step="0.1" value="12" class="w-full">
+                            <input type="number" id="returnRate" class="w-20 p-2 border rounded-md bg-opacity-50 bg-white dark:bg-opacity-10 dark:bg-black focus:ring-2 focus:ring-primary" value="12">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="duration" class="block mb-2 text-sm font-medium">
+                            <i class="fas fa-hourglass-half mr-2"></i>Investment Duration (Years)
+                        </label>
+                        <div class="flex items-center space-x-4">
+                            <input type="range" id="durationSlider" min="1" max="30" value="10" class="w-full">
+                            <input type="number" id="duration" class="w-20 p-2 border rounded-md bg-opacity-50 bg-white dark:bg-opacity-10 dark:bg-black focus:ring-2 focus:ring-primary" value="10">
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" style="display: flex; flex-wrap: wrap;">
+                        <div class="bg-primary bg-opacity-10 p-4 rounded-lg" style="width: fit-content;">
+                            <label class="block mb-1 text-xs font-medium text-gray-800 dark:text-white">Total Investment</label>
+                            <p id="totalInvestment" class="text-2xl font-bold text-gray-800 dark:text-white">₹0</p>
+                        </div>
+                        <div class="bg-secondary bg-opacity-10 p-4 rounded-lg" style="width: fit-content;">
+                            <label class="block mb-1 text-xs font-medium text-white dark:text-gray-800">Estimated Returns</label>
+                            <p id="estimatedReturns" class="text-2xl font-bold text-white dark:text-gray-800">₹0</p>
+                        </div>
+                        <div class="bg-accent bg-opacity-10 p-4 rounded-lg" style="width: fit-content;">
+                            <label class="block mb-1 text-xs font-medium text-gray-800 dark:text-white">Maturity Amount</label>
+                            <p id="maturityAmount" class="text-2xl font-bold text-gray-800 dark:text-white">₹0</p>
+                        </div>
+                    </div>
+                    <div class="bg-card p-4 rounded-lg shadow">
+                        <canvas id="sipChart" class="w-full h-64"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap justify-between items-center mt-8 space-y-4 sm:space-y-0">
+                <div class="space-x-2">
+                    <button id="resetBtn" class="px-4 py-2 bg-gray-200 dark:bg-gray-600 rounded-md hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors">
+                        <i class="fas fa-undo mr-2"></i>Reset
+                    </button>
+                    <button id="emailBtn" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-opacity-90 transition-colors">
+                        <i class="fas fa-envelope mr-2"></i>Email Results
+                    </button>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="darkModeToggle" class="p-2 rounded-full bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors">
+                        <i class="fas fa-sun text-yellow-500 dark:text-gray-300 dark:hidden"></i>
+                        <i class="fas fa-moon text-blue-500 hidden dark:inline"></i>
+                    </button>
+                    <select id="theme" class="p-2 border rounded-md bg-opacity-50 bg-white dark:bg-opacity-10 dark:bg-black focus:ring-2 focus:ring-primary">
+                        <option value="default">Default</option>
+                        <option value="pastel">Soft Pastel</option>
+                        <option value="vibrant">Vibrant</option>
+                        <option value="elegant">Elegant</option>
+                        <option value="nature">Nature</option>
+                    </select>
+                    <select id="chartType" class="p-2 border rounded-md bg-opacity-50 bg-white dark:bg-opacity-10 dark:bg-black focus:ring-2 focus:ring-primary">
+                        <option value="pie">Pie Chart</option>
+                        <option value="bar">Bar Chart</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Popup -->
+    <div id="emailPopup" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl max-w-md w-full">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Email Results</h2>
+            <div class="mb-4">
+                <label for="emailInput" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Enter your email address:</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fas fa-envelope text-gray-400"></i>
+                    </div>
+                    <input type="email" id="emailInput" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm" placeholder="you@example.com">
+                </div>
+            </div>
+            <div class="flex justify-end space-x-2">
+                <button id="cancelEmail" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors">Cancel</button>
+                <button id="sendEmail" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-opacity-90 transition-colors">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM elements
+        const frequencySelect = document.getElementById('frequency');
+        const investmentAmountInput = document.getElementById('investmentAmount');
+        const returnRateSlider = document.getElementById('returnRateSlider');
+        const returnRateInput = document.getElementById('returnRate');
+        const durationSlider = document.getElementById('durationSlider');
+        const durationInput = document.getElementById('duration');
+        const totalInvestmentEl = document.getElementById('totalInvestment');
+        const estimatedReturnsEl = document.getElementById('estimatedReturns');
+        const maturityAmountEl = document.getElementById('maturityAmount');
+        const resetBtn = document.getElementById('resetBtn');
+        const emailBtn = document.getElementById('emailBtn');
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const themeSelect = document.getElementById('theme');
+        const chartTypeSelect = document.getElementById('chartType');
+        const sipChart = document.getElementById('sipChart');
+        const emailPopup = document.getElementById('emailPopup');
+        const emailInput = document.getElementById('emailInput');
+        const cancelEmailBtn = document.getElementById('cancelEmail');
+        const sendEmailBtn = document.getElementById('sendEmail');
+
+        let chart;
+
+        // Calculate SIP
+        function calculateSIP() {
+            const frequency = frequencySelect.value;
+            const investmentAmount = parseFloat(investmentAmountInput.value);
+            const returnRate = parseFloat(returnRateInput.value);
+            const duration = parseInt(durationInput.value);
+
+            const monthlyRate = returnRate / 12 / 100;
+            const totalMonths = duration * (frequency === 'monthly' ? 12 : 1);
+            const totalInvested = investmentAmount * totalMonths;
+            const maturityValue = investmentAmount * ((Math.pow(1 + monthlyRate, totalMonths) - 1) / monthlyRate) * (1 + monthlyRate);
+            const estimatedReturns = maturityValue - totalInvested;
+
+            totalInvestmentEl.textContent = `₹${totalInvested.toFixed(0)}`;
+            estimatedReturnsEl.textContent = `₹${estimatedReturns.toFixed(0)}`;
+            maturityAmountEl.textContent = `₹${maturityValue.toFixed(0)}`;
+
+            updateChart(totalInvested, estimatedReturns);
+        }
+
+        // Update chart
+        function updateChart(totalInvestment, estimatedReturns) {
+            const ctx = sipChart.getContext('2d');
+            const chartType = chartTypeSelect.value;
+
+            if (chart) {
+                chart.destroy();
+            }
+
+            const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim();
+            const secondaryColor = getComputedStyle(document.documentElement).getPropertyValue('--color-secondary').trim();
+
+            const data = {
+                labels: ['Total Investment', 'Estimated Returns'],
+                datasets: [{
+                    data: [totalInvestment, estimatedReturns],
+                    backgroundColor: [primaryColor, secondaryColor],
+                    hoverBackgroundColor: [primaryColor, secondaryColor]
+                }]
+            };
+
+            const options = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: getComputedStyle(document.documentElement).getPropertyValue('--text-main').trim()
+                        }
+                    }
+                }
+            };
+
+            if (chartType === 'bar') {
+                chart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Maturity Amount'],
+                        datasets: [{
+                            label: 'Total Investment',
+                            data: [totalInvestment],
+                            backgroundColor: primaryColor,
+                        }, {
+                            label: 'Estimated Returns',
+                            data: [estimatedReturns],
+                            backgroundColor: secondaryColor,
+                        }]
+                    },
+                    options: {
+                        ...options,
+                        scales: {
+                            x: { stacked: true },
+                            y: { stacked: true }
+                        }
+                    }
+                });
+            } else {
+                chart = new Chart(ctx, {
+                    type: 'pie',
+                    data: data,
+                    options: options
+                });
+            }
+        }
+
+        // Event listeners
+        [frequencySelect, investmentAmountInput, returnRateSlider, returnRateInput, durationSlider, durationInput].forEach(el => {
+            el.addEventListener('input', calculateSIP);
+        });
+
+        resetBtn.addEventListener('click', () => {
+            frequencySelect.value = 'monthly';
+            investmentAmountInput.value = 1000;
+            returnRateSlider.value = returnRateInput.value = 12;
+            durationSlider.value = durationInput.value = 10;
+            calculateSIP();
+        });
+
+        emailBtn.addEventListener('click', () => {
+            emailPopup.classList.remove('hidden');
+            emailPopup.classList.add('flex');
+        });
+
+        cancelEmailBtn.addEventListener('click', () => {
+            emailPopup.classList.add('hidden');
+            emailPopup.classList.remove('flex');
+        });
+
+        sendEmailBtn.addEventListener('click', () => {
+            const email = emailInput.value;
+            if (email) {
+                alert(`Email would be sent to: ${email}`);
+                emailPopup.classList.add('hidden');
+                emailPopup.classList.remove('flex');
+            } else {
+                alert('Please enter a valid email address.');
+            }
+        });
+
+        darkModeToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            calculateSIP(); // Recalculate to update chart colors
+        });
+
+        themeSelect.addEventListener('change', () => {
+            document.body.className = `min-h-screen p-4 md:p-8 apply-theme ${themeSelect.value === 'default' ? '' : 'theme-' + themeSelect.value} transition-colors duration-300`;
+            calculateSIP(); // Recalculate to update chart colors
+        });
+
+        chartTypeSelect.addEventListener('change', calculateSIP);
+
+        // Sync sliders and number inputs
+        returnRateSlider.addEventListener('input', () => {
+            returnRateInput.value = returnRateSlider.value;
+        });
+
+        returnRateInput.addEventListener('input', () => {
+            returnRateSlider.value = returnRateInput.value;
+        });
+
+        durationSlider.addEventListener('input', () => {
+            durationInput.value = durationSlider.value;
+        });
+
+        durationInput.addEventListener('input', () => {
+            durationSlider.value = durationInput.value;
+        });
+
+        // Initial calculation
+        calculateSIP();
+    </script>
+</body>
+</html>
